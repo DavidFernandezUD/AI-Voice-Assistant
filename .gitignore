@@ -1,0 +1,23 @@
+
+# Cache
+__pycache__
+
+# Datasets
+data/
+
+# Logs
+logs/
+*.log
+
+# Enviroment
+.env
+.venv
+virtualenv/
+venv/
+
+# PyCharm
+.idea/
+
+# vs code
+.vscode/
+
