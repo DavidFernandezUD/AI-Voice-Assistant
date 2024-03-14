@@ -1,5 +1,7 @@
 # AI VOICE ASSISTANT
 
+![potato](img/potato_voice_assistant.jpg)
+
 AI VOICE ASSISTANT is a simple, RNN based, voice assistant consisting on a wake-word recognition model,
 that continuously lsitens for a specific keyword, and a speech recognition model that classifies
 the received audio into an action, from a set of actions.
@@ -48,13 +50,14 @@ TODO:
 
 1. Set Up Virtual Enviroment
     1. `virtualenv venv`
-    2. `source venv/bin/activate;
+    2. `source venv/bin/activate`
 
 2. Install pip Packages
-`pip install -r requirements.txt`
+    1. `pip install -r requirements.txt`
 
 3. Training Model on Custom data
     1. `mkdir data`
     2. `cd data`
-    3. Put dataset in data dir and modify load_data.py script for dataset
+    3. `mv  /path/to/dataset ./data`
+    4. modify data loading script
 
