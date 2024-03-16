@@ -21,3 +21,5 @@ venv/
 # vs code
 .vscode/
 
+# Vim
+*.swp
