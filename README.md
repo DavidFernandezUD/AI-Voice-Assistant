@@ -70,7 +70,8 @@ TODO:
 
 ## Resources
 
-- [Audio Deep Learning (part1)](https://towardsdatascience.com/audio-deep-learning-made-simple-sound-classification-step-by-step-cebc936bbe5)
+- [Audio Deep Learning Made Simple](https://towardsdatascience.com/audio-deep-learning-made-simple-sound-classification-step-by-step-cebc936bbe5)
+- [Audio Deep Learning (part1)](https://towardsdatascience.com/audio-deep-learning-made-simple-part-1-state-of-the-art-techniques-da1d3dff2504)
 - [Audio Deep Learning (part2)](https://towardsdatascience.com/audio-deep-learning-made-simple-part-2-why-mel-spectrograms-perform-better-aad889a93505)
 - [Audio Deep Learning (part3)](https://towardsdatascience.com/audio-deep-learning-made-simple-part-3-data-preparation-and-augmentation-24c6e1f6b52)
 - [Guide to Audio Classification Using Deep Learning](https://www.analyticsvidhya.com/blog/2022/04/guide-to-audio-classification-using-deep-learning/)
