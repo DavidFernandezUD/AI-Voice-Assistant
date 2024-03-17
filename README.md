@@ -57,9 +57,8 @@ TODO:
 
 3. Training Model on Custom data
     1. `mkdir data`
-    2. `cd data`
-    3. `mv /path/to/dataset ./data`
-    4. modify data loading script
+    2. `mv /path/to/dataset ./data`
+    3. modify data loading script
 
 ## Datasets
 
@@ -74,6 +73,9 @@ TODO:
 - [Audio Deep Learning (part1)](https://towardsdatascience.com/audio-deep-learning-made-simple-part-1-state-of-the-art-techniques-da1d3dff2504)
 - [Audio Deep Learning (part2)](https://towardsdatascience.com/audio-deep-learning-made-simple-part-2-why-mel-spectrograms-perform-better-aad889a93505)
 - [Audio Deep Learning (part3)](https://towardsdatascience.com/audio-deep-learning-made-simple-part-3-data-preparation-and-augmentation-24c6e1f6b52)
+- [Audio Feature Extraction](https://pytorch.org/audio/stable/tutorials/audio_feature_extractions_tutorial.html#sphx-glr-tutorials-audio-feature-extractions-tutorial-py)
+- [Audio Data Augmentation](https://pytorch.org/audio/main/tutorials/audio_data_augmentation_tutorial.html)
+- [SpecAugment](https://arxiv.org/pdf/1904.08779.pdf)
 - [Guide to Audio Classification Using Deep Learning](https://www.analyticsvidhya.com/blog/2022/04/guide-to-audio-classification-using-deep-learning/)
 - [Speech Commands](https://arxiv.org/pdf/1804.03209.pdf)
 - [AudioMNIST](https://arxiv.org/pdf/1807.03418.pdf)
