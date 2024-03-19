@@ -2,7 +2,7 @@
 
 ![potato](img/potato_voice_assistant.jpg)
 
-AI VOICE ASSISTANT is a simple, RNN based, voice assistant consisting on a wake-word recognition model,
+AI VOICE ASSISTANT is a simple, CNN based, voice assistant consisting on a wake-word recognition model,
 that continuously lsitens for a specific keyword, and a speech recognition model that classifies
 the received audio into an action, from a set of actions.
 
@@ -13,7 +13,7 @@ body movility to choose between different prefabricated routes around the museum
 ## Project Overview
 
 The starting point of the project is the wake-word detection model. This is in essence a binary classification
-problem, so the model of choice will be a LSTM with a single sigmoid output for binary classification. The
+problem, so the model of choice will be a CNN with a single sigmoid output for binary classification. The
 model should be simple enough tu run continuously on an embedded system like a raspberry pi, without consuming
 too much resources, but should also be robust enough so that other words aren't missinterpreted as the keyword.
 
@@ -21,7 +21,7 @@ Both the wake-word model and the command classification model will need a lsiten
 to them. The listener will make use of a buffer to store and feed the audio signal to the model, and should be
 able to work with different hardware.
 
-Finally the command classification model will also consist on a LSTM, but with a softmax layer as output, since
+Finally the command classification model will also consist on a CNN, but with a softmax layer as output, since
 it will be doing multiclass classification in this case. This model would only work after the previous model
 has detected the keyword, and it should stop listening after a command has been detected with enough confidence,
 or a certain ammount of time has passed without any command detected.

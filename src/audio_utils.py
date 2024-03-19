@@ -186,7 +186,7 @@ if __name__ == "__main__":
         spec = mel_spectrogram(audio, 64, 400)
         # spec = MFCC_spectrogram(audio, 64)
 
-        # spec = spec_augment(spec, max_mask=0.1, n_freq_masks=2, n_time_masks=1)
+        spec = spec_augment(spec, max_mask=0.1, n_freq_masks=2, n_time_masks=1)
 
         print(f"shape: {spec.shape}")
 
