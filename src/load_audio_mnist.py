@@ -3,7 +3,7 @@ import torch
 from torch import Tensor
 import os
 import matplotlib.pyplot as plt
-from audio_utils import resample, pad_truncate
+from audio_utils import resample, pad_truncate, mel_spectrogram, spec_augment
 
 
 def load_audioMNIST(path: str, sample_rate: int, length_ms: int):
@@ -25,7 +25,8 @@ def load_audioMNIST(path: str, sample_rate: int, length_ms: int):
         Tuple with audios (signal and sample rate) and labels.
     """
 
-    data = ([], [])
+    specs = []
+    digits = []
     for dir in os.listdir(path):
         speaker_dir = os.path.join(path, dir)
         for file in os.listdir(speaker_dir):
@@ -35,18 +36,20 @@ def load_audioMNIST(path: str, sample_rate: int, length_ms: int):
             audio = resample(audio, sample_rate)
             audio = pad_truncate(audio, length_ms)
 
-            digit = file[0]
+            spec = mel_spectrogram(audio, 64, 400)
+            spec = spec_augment(spec, max_mask=0.1, n_freq_masks=2, n_time_masks=0)
 
-            data[0].append(audio)
-            data[1].append(int(digit))
+            specs.append(spec)
+            digits.append(torch.tensor(int(file[0])))
 
-    return data
+        break
+
+    return torch.stack(specs), torch.stack(digits)
 
 
 if __name__ == "__main__":
 
     data_path = "data/AudioMNIST/"
-    digits = 10
     sample_rate = 8000
     length = 1000
 

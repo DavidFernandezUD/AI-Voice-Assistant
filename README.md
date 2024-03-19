@@ -77,6 +77,7 @@ TODO:
 - [Audio Data Augmentation](https://pytorch.org/audio/main/tutorials/audio_data_augmentation_tutorial.html)
 - [SpecAugment](https://arxiv.org/pdf/1904.08779.pdf)
 - [Guide to Audio Classification Using Deep Learning](https://www.analyticsvidhya.com/blog/2022/04/guide-to-audio-classification-using-deep-learning/)
+- [Audio ML Course](https://huggingface.co/learn/audio-course/chapter1/introduction)
 - [Speech Commands](https://arxiv.org/pdf/1804.03209.pdf)
 - [AudioMNIST](https://arxiv.org/pdf/1807.03418.pdf)
 - [Audio Classification](https://medium.com/@cgawande12/audio-classification-with-the-audio-mnist-dataset-0ad95c3fb713)
