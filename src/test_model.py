@@ -8,12 +8,6 @@ import matplotlib.pyplot as plt
 from load_audio_mnist import load_audioMNIST
 
 
-DATA_PATH = "data/AudioMNIST/"
-SAMPLE_RATE = 8000
-LENGTH = 1000
-
-
-# =========================== DATA LOADING ===========================
 class AudioMNIST(Dataset):
 
     def __init__(self, path, sample_rate, length):
@@ -27,19 +21,6 @@ class AudioMNIST(Dataset):
         return self.X[index], self.y[index]
 
 
-dataset = AudioMNIST(DATA_PATH, SAMPLE_RATE, LENGTH)
-
-split = 0.8
-train_len = int(len(dataset) * split)
-test_len = len(dataset) - train_len
-
-train_ds, test_ds = random_split(dataset, [train_len, test_len])
-
-train_dl = DataLoader(train_ds, batch_size=32, shuffle=True)
-test_dl = DataLoader(test_ds, batch_size=32, shuffle=False)
-
-
-# =========================== MODEL ===========================
 class AudioModel(nn.Module):
 
     def __init__(self):
@@ -47,21 +28,21 @@ class AudioModel(nn.Module):
 
         # Conv BLock 1
         self.conv1 = nn.Sequential(
-            nn.Conv2d(1, 16, (3, 3), padding=2),
+            nn.Conv2d(1, 16, (3, 3), bias=False, padding=2),
             nn.ReLU(),
             nn.BatchNorm2d(16),
             nn.MaxPool2d(2)
         )
 
         self.conv2 = nn.Sequential(
-            nn.Conv2d(16, 32, (3, 3), padding=2),
+            nn.Conv2d(16, 32, (3, 3), bias=False, padding=2),
             nn.ReLU(),
             nn.BatchNorm2d(32),
             nn.MaxPool2d(2)
         )
 
         self.conv3 = nn.Sequential(
-            nn.Conv2d(32, 64, (3, 3), padding=2),
+            nn.Conv2d(32, 64, (3, 3), bias=False, padding=2),
             nn.ReLU(),
             nn.BatchNorm2d(64),
             nn.MaxPool2d(2)
@@ -83,13 +64,6 @@ class AudioModel(nn.Module):
         x = self.linear(x)
 
         return x
-
-
-device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
-print(f"using device: {device}")
-
-model = AudioModel()
-model = model.to(device)
 
 
 def fit(model, train_dl, epochs):
@@ -153,7 +127,33 @@ def eval(model, test_dl):
 
     print(f"accuracy -> {accuracy:.2f}")
 
+
 if __name__ == "__main__":
+
+    device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+    print(f"using device {device}")
+
+
+    # =========================== DATA LOADING ===========================
+    DATA_PATH = "data/AudioMNIST/"
+    SAMPLE_RATE = 8000
+    LENGTH = 1000
+
+    dataset = AudioMNIST(DATA_PATH, SAMPLE_RATE, LENGTH)
+
+    split = 0.8
+    train_len = int(len(dataset) * split)
+    test_len = len(dataset) - train_len
+
+    train_ds, test_ds = random_split(dataset, [train_len, test_len])
+
+    train_dl = DataLoader(train_ds, batch_size=32, shuffle=True)
+    test_dl = DataLoader(test_ds, batch_size=32, shuffle=False)
+
+
+    # =========================== MODEL ===========================
+    model = AudioModel()
+    model = model.to(device)
 
     # # Training
     # fit(model, train_dl, 10)
@@ -161,15 +161,8 @@ if __name__ == "__main__":
     # # Saving Model
     # torch.save(model, "models/test_model_01")
 
+
+    # =========================== EVALUATION ===========================
     model = torch.load("models/test_model_01")
-    model.eval()    # Disable training mode
-
+    model.eval()    # Enable inference mode
     eval(model, test_dl)
-
-    for batch in test_dl:
-        x, y = batch
-        x, y = x.to(device), y.to(device)
-        x = (x - x.mean()) / x.std()
-        print(torch.argmax(model(x), dim=1))
-        print(y)
-        break

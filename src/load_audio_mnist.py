@@ -1,6 +1,5 @@
 import torchaudio
 import torch
-from torch import Tensor
 import os
 import matplotlib.pyplot as plt
 from audio_utils import resample, pad_truncate, mel_spectrogram, spec_augment
@@ -42,7 +41,7 @@ def load_audioMNIST(path: str, sample_rate: int, length_ms: int):
             specs.append(spec)
             digits.append(torch.tensor(int(file[0])))
 
-        break
+        break   # NOTE: This is for loading single folder to save time in testing
 
     return torch.stack(specs), torch.stack(digits)
 
