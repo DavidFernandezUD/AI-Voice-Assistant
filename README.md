@@ -45,6 +45,7 @@ TODO:
 
 - python3
 - virtualenv (recommended)
+- portaudio (PyAudio dependancy)
 
 **NOTICE: This might not work on windows, try to run it with docker or WSL instead!**
 
@@ -53,7 +54,8 @@ TODO:
     2. `source venv/bin/activate`
 
 2. Install pip Packages
-    1. `pip install -r requirements.txt`
+    1. `sudo apt install portaudio19-dev`
+    2. `pip install -r requirements.txt`
 
 3. Training Model on Custom data
     1. `mkdir data`

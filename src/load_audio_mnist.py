@@ -48,11 +48,11 @@ def load_audioMNIST(path: str, sample_rate: int, length_ms: int):
 
 if __name__ == "__main__":
 
-    data_path = "data/AudioMNIST/"
-    sample_rate = 8000
-    length = 1000
+    DATA_PATH = "data/AudioMNIST/"
+    SAMPLE_RATE = 8000
+    LENGTH = 1000
 
-    data = load_audioMNIST(data_path, sample_rate, length)
+    data = load_audioMNIST(DATA_PATH, SAMPLE_RATE, LENGTH)
 
     audios = data["audio"][:100]
 
@@ -61,9 +61,9 @@ if __name__ == "__main__":
         sample, freq = audio
 
         n_frames = sample.shape[1]
-        time_axis = torch.arange(0, n_frames) / sample_rate
+        time_axis = torch.arange(0, n_frames) / SAMPLE_RATE
 
         print(sample)
         
-        plt.specgram(sample[0], Fs=sample_rate)
+        plt.specgram(sample[0], Fs=SAMPLE_RATE)
         plt.show()
