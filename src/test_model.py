@@ -2,9 +2,6 @@ import torch
 import torch.nn as nn
 import torch.functional as F
 from torch.utils.data import Dataset, DataLoader, random_split
-import torchaudio
-import numpy as np
-import matplotlib.pyplot as plt
 from load_audio_mnist import load_audioMNIST
 
 
@@ -158,11 +155,12 @@ if __name__ == "__main__":
     # # Training
     # fit(model, train_dl, 10)
 
-    # # Saving Model
-    # torch.save(model, "models/test_model_01")
+    # # Saving Model (With TorchScript)
+    # model = torch.jit.script(model)
+    # torch.jit.save(model, "models/test_model_01.pth")
 
 
     # =========================== EVALUATION ===========================
-    model = torch.load("models/test_model_01")
+    model = torch.jit.load("models/test_model_script_01.pth")
     model.eval()    # Enable inference mode
     eval(model, test_dl)
