@@ -1,5 +1,13 @@
 """
-Utility script for recording and savimg audio from input devices.
+Script to record and save audio from input device.
+
+To record a single audio shot, specify the --seconds of the recording
+and --path to store the recording.
+
+To interactively record multiple audio shots add --interactive.
+
+When recording, a progress bar will be displayed, and after the recording
+finishes, the recorded audio will be stored in the specified directory.
 """
 
 
@@ -31,13 +39,14 @@ class Recorder:
             frames_per_buffer=self.chunksize
         )
 
-    def record(self, seconds: float, path: str):
+    def record(self, seconds: float, path: str, verbose: bool = True):
         """
         Records single audio shot of the specified length in .wav fromat.
 
         Args:
             seconds (float): Duration of the recording.
             path (str): Path the recording will be saved into.
+            verbose (bool): Display progress bar.
         """
         
         frames = []
@@ -47,15 +56,14 @@ class Recorder:
             data = self.setream.read(self.chunksize, exception_on_overflow=False)
             frames.append(data)
 
-            self._print_progress_bar((time.monotonic() - start_time) / seconds)
+            if verbose:
+                self._print_progress_bar((time.monotonic() - start_time) / seconds)
 
         with wave.open(path, "wb") as file:
             file.setframerate(self.sample_rate)
             file.setnchannels(self.channels)
             file.setsampwidth(self.audio.get_sample_size(self.format))
             file.writeframes(b"".join(frames))
-
-        print(f"\nAudio saved to {path}")
 
     def _print_progress_bar(self, progress):
 
@@ -67,7 +75,7 @@ class Recorder:
         sys.stdout.write(f"\rRecording [{bar}] {int(progress * 100)}%")
         sys.stdout.flush()
 
-    def record_interactive(self, seconds: int, dir: str):
+    def record_interactive(self, seconds: int, dir: str, verbose: bool = True):
         """
         Interactively records single audio shot of the specified length
         in .wav fromat, and stores them in a specified directory.
@@ -75,6 +83,7 @@ class Recorder:
         Args:
             seconds (float): Duration of the recordings.
             dir (str): Path the recordings will be saved into.
+            verbose (bool): Display progress bar.
         """
 
         assert os.path.isdir(dir)
@@ -90,34 +99,21 @@ class Recorder:
                 path = os.path.join(dir, f"{num_recording}.wav")
                 num_recording += 1
 
-                self.record(seconds, path)
+                self.record(seconds, path, verbose)
         except KeyboardInterrupt:
-            print("exit")
+            print("\nexit")
 
 
 if __name__ == "__main__":
 
-    parser = argparse.ArgumentParser(
-        description="""
-            Script to record and save audio from input device.
+    parser = argparse.ArgumentParser()
 
-            To record a single audio shot, specify the --seconds of the recording
-            and --path to store the recording.
-
-            To interactively record multiple audio shots add --interactive.
-
-            When recording, a progress bar will be displayed, and after the recording
-            finishes, the recorded audio will be stored in the specified directory.
-        """
-    )
-
-    
-    parser.add_argument("--seconds", type=float, default=None, help="duration of the recording")
-    parser.add_argument("--path", type=str, default=None, help="path to store a wave file, or directory in case of --interactive")
-    parser.add_argument("--freq", type=int, default=44000, required=False, help="sample rate of sound device")
-    parser.add_argument("--channels", type=int, default=1, required=False, help="number of channels, 1 for mono and 2 for stereo")
-    parser.add_argument("--device", type=int, default=0, required=False, help="input device index")
-    parser.add_argument("--interactive", default=False, action='store_true', required=False, help="activate interactive mode")
+    parser.add_argument("--seconds", type=float, default=None, required=True)
+    parser.add_argument("--path", type=str, default=None, required=True)
+    parser.add_argument("--freq", type=int, default=44000, required=False)
+    parser.add_argument("--channels", type=int, default=1, required=False)
+    parser.add_argument("--device", type=int, default=0, required=False)
+    parser.add_argument("--interactive", default=False, action='store_true', required=False)
 
     args = parser.parse_args()
 
