@@ -28,7 +28,7 @@ def create_csv(dataset_path: str, csv_path: str):
         if os.path.isdir(dir_path) and dir in CLASSES:
             for file in os.listdir(dir_path):
                 
-                file_path = os.path.join(dir, file)
+                file_path = os.path.join(dir_path, file)
                 label = CLASSES.index(dir)
 
                 data.append({"audio": file_path, "label": label})
@@ -36,9 +36,7 @@ def create_csv(dataset_path: str, csv_path: str):
     with open(csv_path, "w") as file:
         
         writer = csv.DictWriter(file, fieldnames=["audio", "label"])
-
-        writer.writeheader()
-        writer.writerows(data)
+        writer.writerows(data)  # NOTE: Not writting header
 
 
 def create_noise_csv(dataset_path: str, csv_path: str):
@@ -49,7 +47,7 @@ def create_noise_csv(dataset_path: str, csv_path: str):
 
     dir_path = os.path.join(dataset_path, "_background_noise_")
     for file in os.listdir(dir_path):
-        data.append(os.path.join("_background_noise_", file))
+        data.append(os.path.join(dir_path, file))
 
     with open(csv_path, "w") as file:
         for row in data:

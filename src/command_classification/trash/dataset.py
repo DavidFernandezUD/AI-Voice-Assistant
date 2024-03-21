@@ -8,7 +8,6 @@ import os
 import random
 
 
-
 class Featurizer(nn.Module):
 
     def __init__(self, original_sample_rate, sample_rate: int = 8000, length_ms: int = 1000, n_mels: int = 64, n_fft: int = 400):

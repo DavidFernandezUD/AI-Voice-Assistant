@@ -65,7 +65,7 @@ class Recorder:
             file.setsampwidth(self.audio.get_sample_size(self.format))
             file.writeframes(b"".join(frames))
 
-    def _print_progress_bar(self, progress):
+    def _print_progress_bar(self, progress: float):
 
         bar_length = 40
         filled_length = int(bar_length * progress)
