@@ -104,7 +104,7 @@ class Featurizer(nn.Module):
 
         # Add background noise if noise available and with 50% chance
         if self.noise is not None and random.random() < self.noise_p:
-            noise_rate = random.random() * 0.1
+            noise_rate = random.random() * 0.05
             noise_wave, _ = torchaudio.load(random.choice(self.noise), normalize=True)
             noise_wave = noise_wave[:, :waveform.shape[1]] * noise_rate
             
@@ -185,10 +185,10 @@ if __name__ == "__main__":
     DATASET_PATH = "data/speech_commands_v0.02/dataset.csv"
     NOISE_PATH = "data/speech_commands_v0.02/background_noise.csv"
 
-    dataset = SpeechCommandsDataset(DATASET_PATH, noise_csv=NOISE_PATH, length_ms=3000)
+    dataset = SpeechCommandsDataset(DATASET_PATH, noise_csv=NOISE_PATH, length_ms=2000)
 
-    for tensor, label in dataset:
-        plt.imshow(tensor[0])
+    for spec, label in dataset:
+        plt.imshow(spec[0])
         plt.colorbar()
         plt.tight_layout()
         plt.show()
