@@ -46,7 +46,7 @@ class Recorder:
         Args:
             seconds (float): Duration of the recording.
             path (str): Path the recording will be saved into.
-            verbose (bool): Display progress bar.
+            verbose (bool, optional): Display progress bar. (Default: True)
         """
         
         frames = []
@@ -83,7 +83,7 @@ class Recorder:
         Args:
             seconds (float): Duration of the recordings.
             dir (str): Path the recordings will be saved into.
-            verbose (bool): Display progress bar.
+            verbose (bool, optional): Display progress bar. (Defaulf: True)
         """
 
         assert os.path.isdir(dir)
@@ -127,4 +127,3 @@ if __name__ == "__main__":
     # Examples:
     # python record_audio.py --interactive --seconds 2 --path data/recordings/ --freq 48000 --device 7
     # python record_audio.py --seconds 2 --path data/recordings/ --freq 44000 --channels 2
-    
