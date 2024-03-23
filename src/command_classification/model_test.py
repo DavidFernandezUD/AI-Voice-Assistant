@@ -1,25 +1,27 @@
-"""
-Script to record and save audio from input device.
-
-To record a single audio shot, specify the --seconds of the recording
-and --path to store the recording.
-
-To interactively record multiple audio shots add --interactive.
-
-When recording, a progress bar will be displayed, and after the recording
-finishes, the recorded audio will be stored in the specified directory.
-"""
-
-
+import torch
+import torch.nn.functional as F
+import torchaudio
+from dataset import Featurizer
 import pyaudio
 import wave
 import time
-import argparse
 import sys
 import os
 
 
-class Recorder:
+CLASSES = [
+    'no', 'learn', 'bed', 'marvin', 'zero',
+    'six', 'yes', 'eight', 'up', 'on',
+    'visual', 'sheila', 'wow', 'stop',
+    'seven', 'house', 'nine', 'forward',
+    'cat', 'follow', 'right', 'bird',
+    'down', 'backward', 'four', 'off',
+    'one', 'happy', 'go', 'two', 'dog',
+    'five', 'three', 'left', 'tree'   
+]
+
+
+class CommandRecognizer:
 
     def __init__(self, sample_rate: int = 44000, channels: int = 1, input_device: int = 0):
 
@@ -39,7 +41,13 @@ class Recorder:
             frames_per_buffer=self.chunksize
         )
 
-    def record(self, seconds: float, path: str, verbose: bool = True):
+        self.featurizer = Featurizer(48000, 16000, length_ms=2000, augment=False)
+
+        self.model = torch.jit.load("models/command_model_01.pth")
+        self.model.to("cpu")
+        self.model.eval()
+
+    def record(self, seconds: float, path: str = "./", verbose: bool = True):
         """
         Records single audio shot of the specified length in .wav fromat.
 
@@ -66,6 +74,7 @@ class Recorder:
             file.writeframes(b"".join(frames))
             print()
 
+
     def _print_progress_bar(self, progress: float):
 
         bar_length = 40
@@ -76,7 +85,19 @@ class Recorder:
         sys.stdout.write(f"\rRecording [{bar}] {int(progress * 100)}%")
         sys.stdout.flush()
 
-    def record_interactive(self, seconds: int, dir: str, verbose: bool = True):
+    def predict(self, path: str):
+
+        audio, _ = torchaudio.load(path)
+        spec = self.featurizer(audio).unsqueeze(dim=0)
+        
+        logits = self.model(spec)
+        preds = F.softmax(logits, dim=1)
+        class_idx = torch.argmax(preds)
+        pred_class = CLASSES[class_idx]
+
+        print(pred_class)
+
+    def record_interactive(self, seconds: int, dir: str = "./", verbose: bool = True):
         """
         Interactively records single audio shot of the specified length
         in .wav fromat, and stores them in a specified directory.
@@ -97,34 +118,20 @@ class Recorder:
                 input("> ")
                 time.sleep(0.2) # To supress key press sound
                 
-                path = os.path.join(dir, f"{num_recording}.wav")
+                path = os.path.join(dir, "temp.wav")
                 num_recording += 1
 
                 self.record(seconds, path, verbose)
+
+                self.predict(path)
+
+                os.remove(path)
+
         except KeyboardInterrupt:
             print("\nexit")
 
 
 if __name__ == "__main__":
 
-    parser = argparse.ArgumentParser()
-
-    parser.add_argument("--seconds", type=float, default=None, required=True)
-    parser.add_argument("--path", type=str, default=None, required=True)
-    parser.add_argument("--freq", type=int, default=44000, required=False)
-    parser.add_argument("--channels", type=int, default=1, required=False)
-    parser.add_argument("--device", type=int, default=0, required=False)
-    parser.add_argument("--interactive", default=False, action='store_true', required=False)
-
-    args = parser.parse_args()
-
-    recorder = Recorder(sample_rate=args.freq, channels=args.channels, input_device=args.device)
-    
-    if args.interactive:
-        recorder.record_interactive(seconds=args.seconds, dir=args.path)
-    else:
-        recorder.record(seconds=args.seconds, path=args.path)
-
-    # Examples:
-    # python record_audio.py --interactive --seconds 2 --path data/recordings/ --freq 48000 --device 7
-    # python record_audio.py --seconds 2 --path data/recordings/ --freq 44000 --channels 2
+    recorder = CommandRecognizer(sample_rate=48000, channels=1, input_device=7)
+    recorder.record_interactive(seconds=2, dir="data/recordings/")
