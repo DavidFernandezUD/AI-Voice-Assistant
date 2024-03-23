@@ -50,21 +50,3 @@ class CommandModel(nn.Module):
         x = self.linear(x)
 
         return x
-
-
-if __name__ == "__main__":
-
-    from dataset import SpeechCommandsDataset
-
-    DATASET_CSV = "data/speech_commands_v0.02/dataset.csv"
-    NOISE_CSV = "data/speech_commands_v0.02/background_noise.csv"
-
-    dataset = SpeechCommandsDataset(DATASET_CSV, NOISE_CSV, length_ms=2000)
-    model = CommandModel()
-
-    x, y = dataset[0]
-    x = torch.unsqueeze(x, 0)
-
-    pred = model(x)
-
-    print(pred)
