@@ -3,9 +3,7 @@ Voice command recognition model.
 """
 
 
-import torch
 import torch.nn as nn
-import torch.functional as F
 
 
 class CommandModel(nn.Module):
@@ -32,11 +30,19 @@ class CommandModel(nn.Module):
             nn.MaxPool2d(2)
         )
 
+        # Conv block 3
+        self.conv3 = nn.Sequential(
+            nn.Conv2d(64, 128, (3, 3)),
+            nn.ReLU(),
+            nn.BatchNorm2d(128),
+            nn.MaxPool2d(2)
+        )
+
         # Linear classifier
         self.linear = nn.Sequential(
             nn.Flatten(),
             nn.Dropout(p=0.25),
-            nn.Linear(42240, 128),
+            nn.Linear(17920, 128),
             nn.ReLU(),
             nn.Dropout(p=0.25),
             nn.Linear(128, 35)
@@ -47,6 +53,7 @@ class CommandModel(nn.Module):
         x = self.norm(x)
         x = self.conv1(x)
         x = self.conv2(x)
+        x = self.conv3(x)
         x = self.linear(x)
 
         return x

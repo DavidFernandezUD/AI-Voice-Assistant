@@ -27,7 +27,7 @@ def train(model: nn.Module, train_dl: DataLoader, epochs: int = 10, learning_rat
         epoch_loss = 0.0
         epoch_acc = 0.0
         n_iters = len(train_dl)
-        for i, batch in enumerate(train_dl):
+        for batch in train_dl:
 
             X_batch = batch[0].to(device)
             y_batch = batch[1].to(device)
@@ -86,7 +86,7 @@ def main(
 
 
     # Loading dataset
-    dataset = SpeechCommandsDataset(dataset_csv, noise_csv, orig_sample_rate=16000, sample_rate=16000, length_ms=2000)
+    dataset = SpeechCommandsDataset(dataset_csv, noise_csv, orig_sample_rate=orig_sample_rate, sample_rate=sample_rate, length_ms=length_ms)
 
 
     # Test train split
@@ -105,6 +105,8 @@ def main(
     model = model.to(device)
     
     train(model, train_dl, epochs=epochs, learning_rate=learning_rate, device=device)
+
+    model.eval()
     eval(model, test_dl, device=device)
 
 
@@ -115,6 +117,8 @@ def main(
 
 if __name__ == "__main__":
 
+    torch.manual_seed(1234)
+
     DATASET_CSV = "data/speech_commands_v0.02/dataset.csv"
     NOISE_CSV = "data/speech_commands_v0.02/background_noise.csv"
 
@@ -122,15 +126,76 @@ if __name__ == "__main__":
     print(f"using device {device}")
 
     main(
-        model_paht="models/command_model_02.pth",
+        model_paht="models/command_model_16kH.pth",
         dataset_csv=DATASET_CSV,
         noise_csv=NOISE_CSV,
         orig_sample_rate=16000,
         sample_rate=16000,
         length_ms=2000,
         train_split=0.8,
-        epochs=30,
+        epochs=40,
         learning_rate=0.001,
         batch_size=32,
         device=device
     )
+
+    # ==== Base ====
+    # Train: acc -> 0.34
+    # Eval: acc -> 0.40
+
+    # ==== Extra Conv + Dropout 0.25 ====
+    # -- 15 epoch --
+    # Train: acc -> 0.88
+    # Eval: acc -> 0.91
+
+    # ==== Extra Conv + 0.5 Dropout ====
+    # -- 15 epoch --
+    # Train: acc -> 0.83
+    # Eval: acc -> 0.9
+
+    # ==== Extra Conv + Dropout 0.25 + No Amp to db ====
+    # -- 15 epoch --
+    # Train: acc -> 0.82
+    # Eval: acc -> 0.79
+
+    # ==== Extra Conv + Dropout 0.25 + Sample Rate 8kH ====
+    # -- 15 epoch --
+    # Train: acc -> 0.79
+    # Eval: acc -> 0.84
+
+    # ==== Extra Conv + Dropout 0.25 + Noise rate 0.1 ====
+    # -- 15 epoch --
+    # Train: acc -> 0.86
+    # Eval: acc -> 0.9
+
+    # ==== Extra Conv + Dropout 0.25 + No SpecAugment ====
+    # -- 15 epoch --
+    # Train: acc -> 0.92
+    # Eval: acc -> 0.94
+
+    # ==== Extra Conv + Dropout 0.25 + 128 Mels ====
+    # -- 15 epoch --
+    # Train: acc -> 0.87
+    # Eval: acc -> 0.90
+
+    # ==== Extra Conv + Dropout 0.25 + MFCC 40  + No Amp to db ====
+    # -- 15 epoch --
+    # Train: acc -> 0.81
+    # Eval: acc -> 0.86
+
+    # ===================================================
+    # 16kH Dropout 0.25 + SpecAugment
+    # Train: -> 0.90
+    # Eval: -> 0.95
+
+    # 16kH Dropout 0.25 + No SpecAugment
+    # Train: -> 0.94
+    # Eval: -> 0.95
+
+    # 16kH Dropout 0.5 + SpecAugment
+    # Train: -> 0.88
+    # Eval: -> 0.95
+
+    # 8kH Dropout 0.5 + SpecAugment
+    # Train: -> 0.86
+    # Eval: -> 0.93
