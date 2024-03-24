@@ -102,7 +102,7 @@ class Featurizer(nn.Module):
         if self.pad_truncate is not None:
             waveform = self.pad_truncate(waveform)
 
-        # Add background noise if noise available and with 50% chance
+        # Add background noise if noise available and with noise_p% chance
         if self.noise is not None and random.random() < self.noise_p:
             noise_rate = random.random() * 0.05
             noise_wave, _ = torchaudio.load(random.choice(self.noise), normalize=True)

@@ -23,7 +23,7 @@ CLASSES = [
 
 class CommandRecognizer:
 
-    def __init__(self, sample_rate: int = 44000, channels: int = 1, input_device: int = 0):
+    def __init__(self, model_path: str, sample_rate: int = 44000, channels: int = 1, input_device: int = 0):
 
         self.sample_rate = sample_rate
         self.channels = channels
@@ -43,7 +43,7 @@ class CommandRecognizer:
 
         self.featurizer = Featurizer(48000, 16000, length_ms=2000, augment=False)
 
-        self.model = torch.jit.load("models/command_model_01.pth")
+        self.model = torch.jit.load(model_path)
         self.model.to("cpu")
         self.model.eval()
 
@@ -133,5 +133,5 @@ class CommandRecognizer:
 
 if __name__ == "__main__":
 
-    recorder = CommandRecognizer(sample_rate=48000, channels=1, input_device=7)
-    recorder.record_interactive(seconds=2, dir="data/recordings/")
+    recorder = CommandRecognizer("models/command_model_16KH.pth", sample_rate=48000, channels=1, input_device=7)
+    recorder.record_interactive(seconds=2)

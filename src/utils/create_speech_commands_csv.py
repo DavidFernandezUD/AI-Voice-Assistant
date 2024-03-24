@@ -1,5 +1,5 @@
 """
-Utility script for generating a json file for speech_commands dataset.
+Utility script for generating a csv file for speech_commands dataset.
 """
 
 
@@ -16,7 +16,7 @@ CLASSES = [
     'cat', 'follow', 'right', 'bird',
     'down', 'backward', 'four', 'off',
     'one', 'happy', 'go', 'two', 'dog',
-    'five', 'three', 'left', 'tree'   
+    'five', 'three', 'left', 'tree'
 ]
 
 
