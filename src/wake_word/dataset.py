@@ -159,8 +159,8 @@ if __name__ == "__main__":
 
     dataset = WakewordDataset(DATASET_PATH, sample_rate=16000, length_ms=2000, augment=True)
 
-    for spwc, label in dataset:
-        plt.imshow(dataset[0][0])
+    for spec, label in dataset:
+        plt.imshow(spec[0])
         plt.colorbar()
         plt.tight_layout()
         plt.show()
