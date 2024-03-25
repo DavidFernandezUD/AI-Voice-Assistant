@@ -6,6 +6,7 @@ Load dataset for wakeword model.
 import torchaudio
 import torchaudio.transforms as T
 from torchaudio.functional import resample
+import torch
 import torch.nn as nn
 import torch.nn.functional as F
 from torch import Tensor
@@ -148,7 +149,7 @@ class WakewordDataset(Dataset):
 
         spec = self.featurizer(waveform, sample_rate)
 
-        return spec, int(label)
+        return spec, torch.tensor([float(label)])
 
 
 if __name__ == "__main__":
