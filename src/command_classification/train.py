@@ -126,7 +126,7 @@ if __name__ == "__main__":
     print(f"using device {device}")
 
     main(
-        model_paht="models/command_model_16kH.pth",
+        model_paht="models/command_model_16KH.pth",
         dataset_csv=DATASET_CSV,
         noise_csv=NOISE_CSV,
         orig_sample_rate=16000,

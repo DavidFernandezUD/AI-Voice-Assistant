@@ -44,7 +44,7 @@ class WakewordModel(nn.Module):
             nn.Dropout(p=0.25),
             nn.Linear(17920, 128),
             nn.ReLU(),
-            nn.Dropout(p=0.25),
+            nn.Dropout(p=0.5),
             nn.Linear(128, 1),
             nn.Sigmoid()
         )

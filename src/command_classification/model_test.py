@@ -41,7 +41,7 @@ class CommandRecognizer:
             frames_per_buffer=self.chunksize
         )
 
-        self.featurizer = Featurizer(48000, 16000, length_ms=2000, augment=False)
+        self.featurizer = Featurizer(sample_rate, 16000, length_ms=2000, augment=False)
 
         self.model = torch.jit.load(model_path)
         self.model.to("cpu")
