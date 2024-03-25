@@ -111,6 +111,7 @@ def main(
 
 
     # Compile and save model with torchscript
+    model.to("cpu")
     model = torch.jit.script(model)
     torch.jit.save(model, model_paht)
 
