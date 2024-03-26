@@ -29,9 +29,9 @@ or a certain ammount of time has passed without any command detected.
 Finally the whole assistant will be introduced as a ROS node to comunicate with the wheelchair.
 
 TODO:
-- [ ] wake word model
-- [ ] audio listener
-- [ ] command recognition model
+- [x] wake word model
+- [X] audio listener
+- [X] command recognition model
 - [ ] AI assistant ROS-noetic node
 
 ## Repository Structure
