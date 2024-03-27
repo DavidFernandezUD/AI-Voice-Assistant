@@ -28,5 +28,5 @@ class VoiceAssistant:
 
 if __name__ == "__main__":
 
-    assistant = VoiceAssistant("models/wakeword_model_16KH.pth", "models/command_model_16KH.pth", sample_rate=48000, input_device=7)
+    assistant = VoiceAssistant("models/wakeword_model_16KH.pth", "models/command_model_16KH.pth", sample_rate=48000, input_device=4)
     assistant.run()

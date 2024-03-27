@@ -6,7 +6,7 @@ import time
 
 class WakewordEngine:
 
-    def __init__(self, model_path: str, activation_threshold: float = 0.7, sample_rate: int = 44000, channels: int = 1, input_device: int = 0):
+    def __init__(self, model_path: str, activation_threshold: float = 0.9, sample_rate: int = 44000, channels: int = 1, input_device: int = 0):
 
         self.activation_threshold = activation_threshold
 

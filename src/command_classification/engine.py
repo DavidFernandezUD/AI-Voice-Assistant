@@ -11,7 +11,7 @@ import os
 
 class CommandEngine:
 
-    def __init__(self, model_path: str, sample_rate: int = 44000, channels: int = 1, input_device: int = 0):
+    def __init__(self, model_path: str,  activation_threshold: float = 0.7, sample_rate: int = 44000, channels: int = 1, input_device: int = 0):
 
         self.CLASSES = [
             'no', 'learn', 'bed', 'marvin', 'zero',
@@ -24,6 +24,8 @@ class CommandEngine:
             'five', 'three', 'left', 'tree'   
         ]
 
+        self.activation_threshold = activation_threshold
+
         self.sample_rate = sample_rate
         self.channels = channels
         self.format = pyaudio.paInt16
@@ -31,7 +33,6 @@ class CommandEngine:
         self.input_device = input_device
 
         self.audio = pyaudio.PyAudio()
-
 
         self.featurizer = Featurizer(sample_rate, 16000, length_ms=2000, augment=False)
 
@@ -102,7 +103,10 @@ class CommandEngine:
         class_idx = torch.argmax(preds)
         pred_class = self.CLASSES[class_idx]
 
-        return pred_class
+        if preds.max() > self.activation_threshold:
+            return pred_class
+        else:
+            return None
     
 
 if __name__ == "__main__":
